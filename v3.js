@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { provider } from "./rpc.js";
-import { V3, WETH_ADDRESS, BURN_ADDRESSES } from "../config.js";
+import { V3, WETH_ADDRESS, BURN_ADDRESSES } from "./config.js";
 
 const FACTORY_ABI = [
   "event PoolCreated(address indexed token0, address indexed token1, uint24 indexed fee, int24 tickSpacing, address pool)",
