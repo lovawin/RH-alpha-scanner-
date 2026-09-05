@@ -71,4 +71,4 @@ export const POLL_INTERVAL_MS = 15_000;
 export const BLOCK_LOOKBACK_ON_START = 500;
 
 // Data file — flat JSON, swap for SQLite/Postgres once this proves out.
-export const DB_PATH = new URL("../data/tokens.json", import.meta.url).pathname;
+export const DB_PATH = new URL("./data/tokens.json", import.meta.url).pathname;
