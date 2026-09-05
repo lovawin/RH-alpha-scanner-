@@ -1,4 +1,4 @@
-import { WEIGHTS, BURN_ADDRESSES } from "./config.js";
+import { WEIGHTS, BURN_ADDRESSES } from "../config.js";
 import { pairContract } from "./rpc.js";
 import { getTokenHolders, getAddressTransactions } from "./blockscout.js";
 
