@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { RPC_URL, FACTORY_ADDRESS, WETH_ADDRESS } from "./config.js";
 import { RPC_URL, FACTORY_ADDRESS, WETH_ADDRESS } from "../config.js";
 
 export const provider = new ethers.JsonRpcProvider(RPC_URL);
