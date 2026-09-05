@@ -62,6 +62,10 @@ export const WEIGHTS = {
 // Blocks after launch to scan for bundled/sniped buys.
 export const BUNDLE_WINDOW_BLOCKS = 3;
 
+// Minimum WETH sitting in a pool/pair contract to bother scoring it.
+// Applies to both V2 and V3 — see getPoolWethBalance() in rpc.js.
+export const MIN_LP_ETH = Number(process.env.RH_MIN_LP_ETH || 0.5);
+
 // How far back / how often the scanner looks for new pairs.
 export const POLL_INTERVAL_MS = 15_000;
 export const BLOCK_LOOKBACK_ON_START = 500;
