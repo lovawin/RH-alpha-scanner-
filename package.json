@@ -5,7 +5,7 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "start": "node --env-file-if-exists=.env scanner.js & node --env-file-if-exists=.env server.js",
+    "start": "node --env-file-if-exists=.env server.js",
     "scan": "node --env-file-if-exists=.env scanner.js",
     "discover": "node --env-file-if-exists=.env discover.js"
   },
