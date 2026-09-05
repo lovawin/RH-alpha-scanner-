@@ -12,7 +12,7 @@ import { simulateSell } from "./simulate.js";
 import { analyzeBundle, scoreBundle } from "./bundle.js";
 import { detectLaunchpad } from "./launchpad.js";
 import { getMentions, queryFor } from "./social.js";
-import { POLL_INTERVAL_MS, BLOCK_LOOKBACK_ON_START, BUNDLE_WINDOW_BLOCKS, MIN_LP_ETH } from "../config.js";
+import { POLL_INTERVAL_MS, BLOCK_LOOKBACK_ON_START, BUNDLE_WINDOW_BLOCKS, MIN_LP_ETH } from "./config.js";
 
 /**
  * Handles both V2 pairs and V3 pools. The only parts that genuinely
