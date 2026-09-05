@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { RPC_URL, FACTORY_ADDRESS, WETH_ADDRESS } from "./config.js";
+import { RPC_URL, FACTORY_ADDRESS, WETH_ADDRESS } from "../config.js";
 
 export const provider = new ethers.JsonRpcProvider(RPC_URL);
 
@@ -36,6 +36,17 @@ export function pairContract(address) {
 
 export function erc20Contract(address) {
   return new ethers.Contract(address, ERC20_ABI, provider);
+}
+
+/**
+ * WETH balance actually held by a pool/pair contract, in whole ETH.
+ * Works for V2 (== reserve) and V3 (sum across all position ticks) —
+ * same read either way, no venue-specific liquidity math needed.
+ */
+export async function getPoolWethBalance(poolAddress) {
+  const weth = erc20Contract(WETH_ADDRESS);
+  const bal = await weth.balanceOf(poolAddress);
+  return Number(ethers.formatEther(bal));
 }
 
 /** Pull PairCreated logs between two blocks. */
