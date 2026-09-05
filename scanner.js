@@ -33,6 +33,15 @@ async function processPool(p) {
     return;
   }
 
+  // Sellability first, before anything else gets computed. Anything not
+  // confirmed sellable — reverted OR unknown — is dropped entirely, not
+  // scored, not saved. "Unknown" is not a middle ground here.
+  const sellability = await simulateSell(tokenAddress).catch(() => ({ status: "error", sellable: null, detail: "sim failed" }));
+  if (sellability.sellable !== true) {
+    console.log(`[skip] ${tokenAddress} sellability=${sellability.sellable} (${sellability.detail}) — dropped, not honeypot-cleared`);
+    return;
+  }
+
   const existing = getToken(tokenAddress);
 
   // A token can list on both V2 and V3. Keep the better-scoring venue
@@ -57,10 +66,9 @@ async function processPool(p) {
     swapCount = Number(info.transactions_count || 0);
   } catch { /* leave 0 */ }
 
-  const [proxy, bytecode, sellability, bundleData, launchpad] = await Promise.all([
+  const [proxy, bytecode, bundleData, launchpad] = await Promise.all([
     detectProxy(tokenAddress).catch(() => ({ kind: "unknown", upgradeable: false })),
     inspectBytecode(tokenAddress).catch(() => ({ found: [], verified: false })),
-    simulateSell(tokenAddress).catch(() => ({ status: "error", sellable: null, detail: "sim failed" })),
     analyzeBundle(tokenAddress, p.pair, p.blockNumber, BUNDLE_WINDOW_BLOCKS)
       .catch(() => ({ bundlePct: null, walletCount: 0, detail: "bundle scan failed" })),
     detectLaunchpad(tokenAddress, deployer, p.txHash).catch(() => ({ origin: "unknown", viaLaunchpad: false })),
