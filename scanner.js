@@ -1,4 +1,4 @@
-import { provider, getNewPairs, pickNonWeth, erc20Contract, getTx } from "./rpc.js";
+import { provider, getNewPairs, pickNonWeth, erc20Contract, getTx, getPoolWethBalance } from "./rpc.js";
 import { getNewPools, pickNonWethV3, scoreV3LpLock, feeLabel } from "./v3.js";
 import {
   scoreLpLock, scoreDeployerHistory, scoreHolderConcentration,
@@ -12,7 +12,7 @@ import { simulateSell } from "./simulate.js";
 import { analyzeBundle, scoreBundle } from "./bundle.js";
 import { detectLaunchpad } from "./launchpad.js";
 import { getMentions, queryFor } from "./social.js";
-import { POLL_INTERVAL_MS, BLOCK_LOOKBACK_ON_START, BUNDLE_WINDOW_BLOCKS } from "./config.js";
+import { POLL_INTERVAL_MS, BLOCK_LOOKBACK_ON_START, BUNDLE_WINDOW_BLOCKS, MIN_LP_ETH } from "../config.js";
 
 /**
  * Handles both V2 pairs and V3 pools. The only parts that genuinely
@@ -26,6 +26,12 @@ async function processPool(p) {
     ? pickNonWethV3(p.token0, p.token1)
     : pickNonWeth(p.token0, p.token1);
   if (!tokenAddress) return;
+
+  const ethInPool = await getPoolWethBalance(p.pair).catch(() => null);
+  if (ethInPool !== null && ethInPool < MIN_LP_ETH) {
+    console.log(`[skip] ${tokenAddress} LP too thin: ${ethInPool.toFixed(3)} ETH < ${MIN_LP_ETH} ETH min (${isV3 ? "v3" : "v2"})`);
+    return;
+  }
 
   const existing = getToken(tokenAddress);
 
